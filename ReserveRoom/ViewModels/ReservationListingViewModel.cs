@@ -13,6 +13,7 @@ using OfficeOpenXml.Style;
 using ReserveRoom.Commands;
 using System.ComponentModel;
 using System.Windows.Data;
+using ReserveRoom.Stores;
 
 namespace ReserveRoom.ViewModels
 {
@@ -29,10 +30,10 @@ namespace ReserveRoom.ViewModels
 
 
 
-        public ReservationListingViewModel(Hotel hotel)
+        public ReservationListingViewModel(Hotel hotel, NavigationStore navigationStore)
         {
 
-            MakeReservationCommand = new NavigateCommand(hotel);
+            MakeReservationCommand = new NavigateCommand(hotel, navigationStore);
 
             _hotel = hotel;
             _reservations = new ObservableCollection<ReservationViewModel>();

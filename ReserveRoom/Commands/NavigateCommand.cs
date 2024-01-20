@@ -1,4 +1,6 @@
 ﻿using ReserveRoom.Models;
+using ReserveRoom.Stores;
+using ReserveRoom.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,20 +11,27 @@ namespace ReserveRoom.Commands
 {
     public class NavigateCommand : CommandBase
     {
+        private readonly NavigationStore _navigationStore;
         private readonly Hotel _hotel;
-        public NavigateCommand(Hotel hotel) 
-        { 
+
+
+        public NavigateCommand(Hotel hotel, NavigationStore navigationstore)
+        {
+            _navigationStore = navigationstore;
             _hotel = hotel;
         }
         public override void Execute(object? parameter)
         {
-            _hotel.MakeReservation(new Reservation(
-                "Ali",
-                new RoomID(22, 22),
-                new DateTime(2025, 1, 1),
-                new DateTime(2025, 1, 5)
-                ));
-            
+           
+            if(_navigationStore.CurrentViewModel is MakeReservationViewModel)
+            {
+                _navigationStore.CurrentViewModel = new ReservationListingViewModel(_hotel, _navigationStore);
+            }
+
+            else _navigationStore.CurrentViewModel = new MakeReservationViewModel(_hotel, _navigationStore);
+
         }
+
+        
     }
 }

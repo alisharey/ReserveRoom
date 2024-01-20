@@ -1,5 +1,6 @@
 ﻿using ReserveRoom.Exceptions;
 using ReserveRoom.Models;
+using ReserveRoom.Stores;
 using ReserveRoom.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -17,12 +18,14 @@ namespace ReserveRoom.Commands
     {
         private readonly Hotel _hotel;
         private readonly MakeReservationViewModel _makeReservationViewModel;
+        private readonly NavigationStore _navigationStore;
 
-        public MakeReservationCommand(MakeReservationViewModel makeReservationViewModel, Hotel hotel)
+        public MakeReservationCommand( Hotel hotel, MakeReservationViewModel makeReservationViewModel, NavigationStore navigationstore)
         {
             _hotel = hotel;
             _makeReservationViewModel = makeReservationViewModel;
             _makeReservationViewModel.PropertyChanged += OnViewModelPropertyChanged;
+            _navigationStore = navigationstore;
         }
 
         public override bool CanExecute(object? parameter)
@@ -44,6 +47,9 @@ namespace ReserveRoom.Commands
             try
             {
                 _hotel.MakeReservation(reservation);
+                _navigationStore.CurrentViewModel = new ReservationListingViewModel(_hotel, _navigationStore);
+
+
             }
             catch (ReservationConflictException)
             {

@@ -1,6 +1,8 @@
 ﻿using ReserveRoom.Exceptions;
 using ReserveRoom.Models;
+using ReserveRoom.Stores;
 using ReserveRoom.ViewModels;
+using ReserveRoom.Views;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -18,18 +20,21 @@ namespace ReserveRoom
     {
 
         private readonly Hotel _hotel;
+        private readonly NavigationStore _navigationStore;
 
         public App()
         {
            _hotel = new Hotel("Some random bs");
+           _navigationStore = new NavigationStore();
         }
 
         protected override void OnStartup(StartupEventArgs e)
         {
+            _navigationStore.CurrentViewModel = new ReservationListingViewModel(_hotel, _navigationStore);
 
             MainWindow = new MainWindow()
             {
-                DataContext = new MainViewModel(_hotel)
+                DataContext = new MainViewModel(_navigationStore)
             };
             
             MainWindow.Show();

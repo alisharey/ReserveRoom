@@ -89,15 +89,15 @@ namespace ReserveRoom.Models
                 row++;
             }
 
-            if (File.Exists(filename))
-                File.Delete(filename);
+            if (File.Exists(_filename))
+                File.Delete(_filename);
 
             // Create excel file on physical disk  
-            FileStream objFileStrm = File.Create(filename);
+            FileStream objFileStrm = File.Create(_filename);
             objFileStrm.Close();
 
             // Write content to excel file  
-            File.WriteAllBytes(filename, excel.GetAsByteArray());
+            File.WriteAllBytes(_filename, excel.GetAsByteArray());
             //Close Excel package 
             excel.Dispose();
 
